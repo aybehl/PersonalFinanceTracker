@@ -18,9 +18,17 @@ namespace PersonalFinanceTracker.Models
         [ForeignKey("Category")]
         public int CategoryId { get; set; }
         public virtual Category Category { get; set; }
+    }
 
-        //[ForeignKey("TransactionType")]
-        //public int TransactionTypeId { get; set; }
-        //public virtual TransactionType TransactionType { get; set; }
+    public class TransactionDto {
+        public int TransactionId { get; set; }
+        public string Title { get; set; }
+        public decimal Amount { get; set; }
+        public DateTime TransactionDate { get; set; }
+
+        public string CategoryName { get; set; }
+
+        public string TransactionTypeName { get; set; }
+
     }
 }

@@ -17,4 +17,11 @@ namespace PersonalFinanceTracker.Models
         public int TransactionTypeId { get; set; }
         public virtual TransactionType TransactionType { get; set; }
     }
+
+    public class CategoryDto {
+        public int CategoryId { get; set; }
+        public string CategoryName { get; set; }
+
+        public string TransactionTypeName { get; set; }
+    }
 }
