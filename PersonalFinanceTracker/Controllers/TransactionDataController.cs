@@ -1,6 +1,8 @@
 ﻿using PersonalFinanceTracker.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Infrastructure;
+using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -125,6 +127,20 @@ namespace PersonalFinanceTracker.Controllers
             return Ok(transactionDtos);
         }
 
+        /// <summary>
+        /// This api helps add a new Transaction to the Transactions Table in the DB
+        /// </summary>
+        /// <param name="transaction">JSON FORM DATA of a Transaction</param>
+        /// <returns>
+        /// HEADER: 201 (Created)
+        /// CONTENT: TransactionID, Transaction Data
+        /// or
+        /// HEADER: 400 (Bad Request)
+        /// </returns>
+        /// <example>
+        ///curl -d @C:\Users\Ahzi\source\repos\PersonalFinanceTracker\PersonalFinanceTracker\JsonData\Transaction.json -H "Content-Type:application/json" https://localhost:44356/api/TransactionData/addTransaction
+        ///{"TransactionId":9,"Title":"Cheque for freelance software gig","Amount":1000.99,"TransactionDate":"2024-06-03T00:00:00","CategoryId":2,"Category":null}
+        /// </example>
         [ResponseType(typeof(Transaction))]
         [HttpPost]
         [Route("api/TransactionData/AddTransaction")]
@@ -138,10 +154,101 @@ namespace PersonalFinanceTracker.Controllers
             db.Transactions.Add(transaction);
             db.SaveChanges();
 
-            return CreatedAtRoute("DefaultApi", new { id = transaction.TransactionId }, transaction);
+            // Manually construct the URL for the newly created resource
+            var location = new Uri(Request.RequestUri, $"/api/TransactionData/{transaction.TransactionId}");
+
+            // Return a response with the location of the newly created transaction
+            return Created(location, transaction);
         }
 
+        /// <summary>
+        /// Deletes a transaction from the system by its ID
+        /// </summary>
+        /// <param name="id">The primary key of the transaction</param>
+        /// <returns>
+        /// HEADER: 200 (OK)
+        /// or
+        /// HEADER: 404 (NOT FOUND)
+        /// </returns>
+        /// <example>
+        /// DELETE: api/TransactionData/DeleteTransaction/5
+        /// FORM DATA: (empty)
+        /// curl -i -X DELETE https://localhost:44356/api/TransactionData/deleteTransaction/7
+        /// HTTP/1.1 200 OK
+        /// </example>
+        [ResponseType(typeof(Transaction))]
+        [HttpDelete]
+        [Route("api/TransactionData/DeleteTransaction/{id}")]
+        public IHttpActionResult DeleteTransaction(int id)
+        {
+            Transaction transaction = db.Transactions.Find(id);
+            if (transaction == null)
+            {
+                return NotFound();
+            }
 
+            db.Transactions.Remove(transaction);
+            db.SaveChanges();
+
+            return Ok(transaction);
+        }
+
+        /// <summary>
+        /// Updates a particular transaction in the system with PUT Data input
+        /// </summary>
+        /// <param name="id">Represents the Transaction ID primary key</param>
+        /// <param name="transaction">JSON FORM DATA of a transaction</param>
+        /// <returns>
+        /// HEADER: 204 (Success, No Content Response)
+        /// or
+        /// HEADER: 400 (Bad Request)
+        /// or
+        /// HEADER: 404 (Not Found)
+        /// </returns>
+        /// <example>
+        /// PUT: api/TransactionData/UpdateTransaction/5
+        /// FORM DATA: Transaction JSON Object
+        /// curl -X PUT -d @C:\Users\Ahzi\source\repos\PersonalFinanceTracker\PersonalFinanceTracker\JsonData\Transaction.json -H "Content-Type:application/json" https://localhost:44356/api/TransactionData/updateTransaction/2
+        /// </example>
+        [ResponseType(typeof(void))]
+        [HttpPut]
+        [Route("api/TransactionData/UpdateTransaction/{id}")]
+        public IHttpActionResult UpdateTransaction(int id, Transaction transaction)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (id != transaction.TransactionId)
+            {
+                return BadRequest();
+            }
+
+            db.Entry(transaction).State = EntityState.Modified;
+
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!TransactionExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return StatusCode(HttpStatusCode.NoContent);
+        }
+
+        private bool TransactionExists(int id) {
+            return db.Transactions.Count(t => t.TransactionId == id) > 0;
+        }
     }
 }
 
