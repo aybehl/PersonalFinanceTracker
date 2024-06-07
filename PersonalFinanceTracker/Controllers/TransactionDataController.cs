@@ -47,7 +47,33 @@ namespace PersonalFinanceTracker.Controllers
             return transactionDtos;
         }
 
+        /// <summary>
+        /// This method will access the local database to get the Transaction from the Transactions table for the given Id
+        /// </summary>
+        /// <example>
+        /// GET api/TransactionData/findTransactionById/1 -> {"TransactionId":1,"Title":"Bought Ice-cream and some fruits ","Amount":12.99,"TransactionDate":"2024-06-05T00:00:00","CategoryName":"Groceries","TransactionTypeName":"Expense"},{"TransactionId":2,"Title":"May Salary","Amount":4500.00,"TransactionDate":"2024-06-01T00:00:00","CategoryName":"Salary","TransactionTypeName":"Income"}
+        /// </example>
+        /// <returns>A Transaction</returns>        
+        [HttpGet]
+        [Route("api/TransactionData/findTransactionById/{transactionId}")]
+        public IHttpActionResult findTransactionById(int transactionId)
+        {
+            Transaction transaction = db.Transactions.Find(transactionId);
+            if (transaction == null) {
+                return NotFound();
+            }
+            
+            TransactionDto transactionDto = new TransactionDto();
 
+            transactionDto.TransactionId = transaction.TransactionId;
+            transactionDto.Title = transaction.Title;
+            transactionDto.Amount = transaction.Amount;
+            transactionDto.CategoryName = transaction.Category.CategoryName;
+            transactionDto.TransactionDate = transaction.TransactionDate;
+            transactionDto.TransactionTypeName = transaction.Category.TransactionType.TransactionTypeName;
+
+            return Ok(transactionDto);
+        }
 
         /// <summary>
         /// This method will access the local database to get all the Transactions from the Transactions table that match the filters provided as query parameters
@@ -155,10 +181,12 @@ namespace PersonalFinanceTracker.Controllers
             db.SaveChanges();
 
             // Manually construct the URL for the newly created resource
-            var location = new Uri(Request.RequestUri, $"/api/TransactionData/{transaction.TransactionId}");
+            //var location = new Uri(Request.RequestUri, $"/api/TransactionData/{transaction.TransactionId}");
 
             // Return a response with the location of the newly created transaction
-            return Created(location, transaction);
+            //return Created(location, transaction);
+
+            return Ok();
         }
 
         /// <summary>

@@ -1,0 +1,63 @@
+﻿@model PersonalFinanceTracker.Models.ViewModels.UpdateTransaction
+
+@{
+    ViewBag.Title = "Edit An Expense";
+}
+
+<div class="container">
+    <h3 class="text-center">Update Expense</h3>
+    <form action="@Url.Action("UpdateExpense", "Transaction", new { id = Model.SelectedTransaction.TransactionId})" method="POST">
+        <div class="form-group">
+            <label for="expenseTitle">Expense Title</label>
+            <input type="text" class="form-control" id="expenseTitle" name="Title" value="@Model.SelectedTransaction.Title" required>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="amount">Amount</label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">$</div>
+                    </div>
+                    <input type="text" class="form-control" id="amount" name="Amount" value="@Model.SelectedTransaction.Amount" required>
+                </div>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="category">Category</label>
+                <select id="category" name="CategoryId" class="form-control" required>
+                    @foreach (var category in Model.CategoryOptions)
+                    {
+                        if (category.CategoryName == Model.SelectedTransaction.CategoryName)
+                        {
+                            <option value="@category.CategoryId" selected>@category.CategoryName</option>
+                        }
+                        else
+                        {
+                            <option value="@category.CategoryId">@category.CategoryName</option>
+                        }
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="date">Date</label>
+                <input type="date" class="form-control" name="TransactionDate" id="date" value="@Model.SelectedTransaction.TransactionDate" required>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="repeats">Repeats</label>
+                <select id="repeats" class="form-control">
+                    <option selected>Doesn't Repeat</option>
+                    <option>Daily</option>
+                    <option>Weekly</option>
+                    <option>Monthly</option>
+                    <option>Yearly</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group text-center">
+            <a href="@Url.Action("ListExpenses", "Transaction")" class="btn btn-outline-secondary">Cancel</a>
+            <button type="submit" class="btn btn-submit">Update</button>
+        </div>
+    </form>
+</div>
+
