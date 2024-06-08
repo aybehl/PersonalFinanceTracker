@@ -1,0 +1,71 @@
+﻿
+:root {
+    --bg-color: #EF9B0F;
+    --text-color: #212121;
+}
+
+/* 
+ 
+
+body {
+    background-color: var(--bg-color);
+}
+    custom.css */
+
+/* Background gradient */
+body {
+    background: linear-gradient(to bottom, #EF9B0F, #ffffff);
+    background-attachment: fixed;
+    color: #212121;
+}
+
+/* Navbar customizations */
+.navbar {
+    background-color: transparent !important;
+}
+
+.navbar-brand {
+    /*color: #5a5a5a !important;*/
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+}
+
+    .navbar-brand img.logo {
+        height: 40px;
+        margin-right: 10px;
+    }
+
+.nav-link {
+    color: #5a5a5a !important;
+    font-weight: bold;
+}
+
+    .nav-link:hover {
+        color: #333 !important;
+    }
+
+.navbar-nav .nav-item {
+    margin-right: 20px;
+}
+
+/* Custom button */
+.btn-custom {
+    background-color: #e94e77;
+    border-color: #e94e77;
+    color: #fff;
+}
+
+    .btn-custom:hover {
+        background-color: #d44063;
+        border-color: #d44063;
+        color: #fff;
+    }
+
+/* Container for main content */
+.body-content {
+    padding: 20px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}

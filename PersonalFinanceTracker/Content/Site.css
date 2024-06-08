@@ -18,38 +18,3 @@ select,
 textarea {
     max-width: 280px;
 }
-
-body {
-    background: linear-gradient(to bottom, #ffcc80, #ffe0b2);
-}
-
-.container {
-    max-width: 500px;
-    margin-top: 100px;
-    background: #ffffff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.form-group label {
-    font-weight: bold;
-}
-
-.btn-submit {
-    background-color: #4CAF50;
-    color: white;
-}
-
-.navbar {
-    background-color: transparent !important;
-}
-
-.navbar-brand {
-    font-weight: bold;
-}
-
-.navbar-nav .nav-link {
-    font-weight: bold;
-}
-
