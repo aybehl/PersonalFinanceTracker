@@ -243,7 +243,10 @@
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
     <Content Include="Content\custom.css" />
+    <Content Include="Content\images\edit_icon.png" />
+    <Content Include="Content\images\filter_icon.png" />
     <Content Include="Content\images\SpendSmartLogo.svg" />
+    <Content Include="Content\images\trash_icon.png" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />

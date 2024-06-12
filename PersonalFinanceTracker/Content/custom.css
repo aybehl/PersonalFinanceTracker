@@ -1,31 +1,20 @@
-﻿
-:root {
-    --bg-color: #EF9B0F;
-    --text-color: #212121;
-}
-
-/* 
- 
-
-body {
-    background-color: var(--bg-color);
-}
-    custom.css */
+﻿/* custom.css */
 
 /* Background gradient */
 body {
-    background: linear-gradient(to bottom, #EF9B0F, #ffffff);
+    background: linear-gradient(to bottom, #f7a440, #f1c060);
     background-attachment: fixed;
-    color: #212121;
+    color: #333;
 }
 
 /* Navbar customizations */
 .navbar {
     background-color: transparent !important;
+    border: none;
 }
 
 .navbar-brand {
-    /*color: #5a5a5a !important;*/
+    color: #5a5a5a !important;
     font-weight: bold;
     display: flex;
     align-items: center;
@@ -62,10 +51,104 @@ body {
         color: #fff;
     }
 
-/* Container for main content */
-.body-content {
-    padding: 20px;
-    background: #fff;
+/* Card customizations */
+.card {
     border-radius: 10px;
+    border: none;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 700px;
+    margin: 0 auto;
 }
+
+.card-title {
+    margin-bottom: 0.5rem;
+}
+
+.card-text {
+    margin-bottom: 0.25rem;
+}
+
+.btn-outline-danger {
+    color: #e94e77 !important;
+    border-color: #e94e77 !important;
+}
+
+    .btn-outline-danger:hover {
+        background-color: #e94e77 !important;
+        border-color: #e94e77 !important;
+        color: #fff !important;
+    }
+
+.btn-outline-primary {
+    color: #007bff !important;
+    border-color: #007bff !important;
+}
+
+    .btn-outline-primary:hover {
+        background-color: #007bff !important;
+        border-color: #007bff !important;
+        color: #fff !important;
+    }
+
+.btn-category {
+    background-color: #ffc107;
+    border: none;
+    color: #fff;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    border-radius: 5px;
+}
+
+/* Add margin to the heading */
+h2.mb-4 {
+    margin-bottom: 4rem !important;
+}
+
+/* Ensure filter-container is same width as card */
+.filter-container {
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.filter-by-text {
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+/* Form input and label customizations */
+.form-group label {
+    font-weight: bold;
+}
+
+.form-group input,
+.form-group select {
+    border-radius: 5px;
+}
+
+.form-group input {
+    max-width: 100%;
+}
+
+.form-label {
+    font-weight: bold;
+}
+
+.form-control,
+.form-select {
+    border-radius: 5px;
+    width: 100%; /* Ensure the form controls take up 100% width */
+}
+
+/* Submit button customizations */
+.btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+    color: #fff;
+    font-weight: bold;
+}
+
+    .btn-success:hover {
+        background-color: #218838;
+        border-color: #1e7e34;
+        color: #fff;
+    }

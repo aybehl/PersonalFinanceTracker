@@ -4,46 +4,50 @@
 }
 
 <div class="container mt-5">
-    <h2 class="text-center">My Expenses</h2>
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <div>
-            <button class="btn btn-outline-secondary" id="filterBy">Filter By</button>
-            <button class="btn btn-outline-primary">This Month</button>
-            <button class="btn btn-outline-primary">Last Month</button>
-            <button class="btn btn-outline-primary dropdown-toggle" type="button" id="categoryDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                Category
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="categoryDropdown">
-                <li><a class="dropdown-item" href="#">Rent</a></li>
-                <li><a class="dropdown-item" href="#">Entertainment</a></li>
-                <li><a class="dropdown-item" href="#">Shopping</a></li>
-            </ul>
+    <h2 class="text-center mb-4">My Expenses</h2>
+    <div class="filter-container" style="max-width: 700px; margin: 0 auto;">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="d-flex align-items-center">
+                <img src="~/Content/images/filter_icon.png" alt="A funnel shaped icon">
+                <span class="filter-by-text">Filter By</span>
+                <button class="btn btn-primary ms-2">This Month</button>
+                <button class="btn btn-primary ms-2">Last Month</button>
+                <button class="btn btn-primary ms-2 dropdown-toggle" type="button" id="categoryDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    Category
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="categoryDropdown">
+                    <li><a class="dropdown-item" href="#">Rent</a></li>
+                    <li><a class="dropdown-item" href="#">Entertainment</a></li>
+                    <li><a class="dropdown-item" href="#">Shopping</a></li>
+                </ul>
+            </div>
+            <a href="/Transaction/NewExpense" class="btn btn-danger">+ New Expense</a>
         </div>
-        <a href="/Transaction/NewExpense" class="btn btn-danger">+ New Expense</a>
     </div>
 
     <div class="row">
         <div class="col-md-12">
             @foreach (var transaction in Model)
             {
-                <div class="card mt-3">
+                <div class="card mt-3" style="max-width: 700px; margin: auto;">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="d-flex align-items-center">
-                                <!-- Assuming you have icons for each category, you can add them here -->
-                                                                <div>
+                                <div>
                                     <h5 class="card-title">@transaction.Title</h5>
-                                    <p class="card-text">Amount: $@transaction.Amount</p>
-                                    <p class="card-text">Date: @transaction.TransactionDate.ToString("dd MMM yyyy")</p>
-                                    <p class="card-text">Category: @transaction.CategoryName</p>
+                                    <div class="d-flex">
+                                        <p class="card-text me-3">$@transaction.Amount</p>
+                                        <p class="card-text">@transaction.TransactionDate.ToString("dd MMM yyyy")</p>
+                                    </div>
+                                    <button class="btn btn-sm btn-category">@transaction.CategoryName</button>
                                 </div>
                             </div>
                             <div>
-                                <a href="#" class="btn btn-outline-danger me-2" data-bs-toggle="modal" data-bs-target="#deleteModal" data-id="@transaction.TransactionId" data-title="@transaction.Title">
-                                    <i class="fa-solid fa-trash"></i>
-                                </a>
                                 <a href="/Transaction/EditExpense/@transaction.TransactionId" class="btn btn-outline-primary">
-                                    <i class="fa fa-pencil"></i>
+                                    <img src="~/Content/images/edit_icon.png" alt="A pencil icon">
+                                </a>
+                                <a href="#" class="btn btn-outline-danger me-2" data-bs-toggle="modal" data-bs-target="#deleteModal" data-id="@transaction.TransactionId" data-title="@transaction.Title">
+                                    <img src="~/Content/images/trash_icon.png" alt="A dustbin icon">
                                 </a>
                             </div>
                         </div>
