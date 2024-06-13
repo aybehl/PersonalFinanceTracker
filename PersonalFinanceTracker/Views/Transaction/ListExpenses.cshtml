@@ -1,4 +1,5 @@
-﻿@model IEnumerable<PersonalFinanceTracker.Models.TransactionDto>
+﻿@model PersonalFinanceTracker.Models.ViewModels.ListTransactions
+
 @{
     ViewBag.Title = "List all Expenses";
 }
@@ -9,25 +10,25 @@
         <div class="d-flex justify-content-between align-items-center mb-3">
             <div class="d-flex align-items-center">
                 <img src="~/Content/images/filter_icon.png" alt="A funnel shaped icon">
-                <span class="filter-by-text">Filter By</span>
-                <button class="btn btn-primary ms-2">This Month</button>
-                <button class="btn btn-primary ms-2">Last Month</button>
-                <button class="btn btn-primary ms-2 dropdown-toggle" type="button" id="categoryDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                    Category
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="categoryDropdown">
-                    <li><a class="dropdown-item" href="#">Rent</a></li>
-                    <li><a class="dropdown-item" href="#">Entertainment</a></li>
-                    <li><a class="dropdown-item" href="#">Shopping</a></li>
-                </ul>
+                <span class="filter-by-text ms-2">Filter By</span>
+                <a href="@Url.Action("ListExpenses", "Transaction", new { filter = "currentMonth" })" class="btn btn-primary ms-2 @(Model.SelectedFilter == "currentMonth" ? "active" : "")" role="button">This Month</a>
+                <a href="@Url.Action("ListExpenses", "Transaction", new { filter = "lastMonth" })" class="btn btn-primary ms-2 @(Model.SelectedFilter == "lastMonth" ? "active" : "")" role="button">Last Month</a>
+
+                <select class="form-select ms-2 select-primary" style="width: auto;" id="categoryDropdown" onchange="location = this.value;">
+                    <option selected disabled>Category</option>
+                    @foreach (var category in Model.CategoryList)
+                    {
+                        <option value="@Url.Action("ListExpenses", "Transaction", new { categoryName = category.CategoryName })" @(Model.SelectedCategory == category.CategoryName ? "selected" : "")>@category.CategoryName</option>
+                    }
+                </select>
             </div>
-            <a href="/Transaction/NewExpense" class="btn btn-danger">+ New Expense</a>
+            <a href="/Transaction/NewExpense" class="btn btn-danger" role="button">+ New Expense</a>
         </div>
     </div>
 
     <div class="row">
         <div class="col-md-12">
-            @foreach (var transaction in Model)
+            @foreach (var transaction in Model.TransactionList)
             {
                 <div class="card mt-3" style="max-width: 700px; margin: auto;">
                     <div class="card-body">
@@ -43,10 +44,10 @@
                                 </div>
                             </div>
                             <div>
-                                <a href="/Transaction/EditExpense/@transaction.TransactionId" class="btn btn-outline-primary">
+                                <a href="/Transaction/EditExpense/@transaction.TransactionId" class="btn btn-outline-primary" role="button">
                                     <img src="~/Content/images/edit_icon.png" alt="A pencil icon">
                                 </a>
-                                <a href="#" class="btn btn-outline-danger me-2" data-bs-toggle="modal" data-bs-target="#deleteModal" data-id="@transaction.TransactionId" data-title="@transaction.Title">
+                                <a href="#" class="btn btn-outline-danger me-2" role="button" data-bs-toggle="modal" data-bs-target="#deleteModal" data-id="@transaction.TransactionId" data-title="@transaction.Title">
                                     <img src="~/Content/images/trash_icon.png" alt="A dustbin icon">
                                 </a>
                             </div>

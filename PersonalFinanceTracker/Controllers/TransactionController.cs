@@ -30,13 +30,56 @@ namespace PersonalFinanceTracker.Controllers
         }
 
         //GET: Transaction/ListExpenses
-        public ActionResult ListExpenses() {
+        /*public ActionResult ListExpenses() {
             string url = "TransactionData/findTransactions?transactionType=Expense";
             HttpResponseMessage response = client.GetAsync(url).Result;
 
             IEnumerable<TransactionDto> expenseTransactions = response.Content.ReadAsAsync<IEnumerable<TransactionDto>>().Result;
 
             return View(expenseTransactions);        
+        }*/
+
+        //GET: Transaction/ListExpenses
+        public ActionResult ListExpenses(string filter = null, string categoryName = null)
+        {
+            ListTransactions ViewModel = new ListTransactions();
+
+            //Get all categories for Expenses to render the dowpdown
+            string url = "categoryData/listCategoryByTransactionType?transactionTypeName=Expense";
+            HttpResponseMessage response = client.GetAsync(url).Result;
+            if (!response.IsSuccessStatusCode)
+            {
+                TempData["ErrorMessage"] = "An error occurred while listing all expense Categories. Please try again.";
+                TempData["BackUrl"] = Url.Action("ListExpenses", "Transaction");
+                return RedirectToAction("Error");
+            }
+
+            IEnumerable<CategoryDto> categories = response.Content.ReadAsAsync<IEnumerable<CategoryDto>>().Result;
+            ViewModel.CategoryList = categories;
+
+            url = "TransactionData/findTransactions?transactionType=Expense";
+            
+            if (filter == "currentMonth")
+            {
+                url += "&currentMonth=true";
+            }
+            else if (filter == "lastMonth")
+            {
+                url += "&lastMonth=true";
+            }
+            
+            if (!string.IsNullOrEmpty(categoryName))
+            {
+                url += $"&categoryName={categoryName}";
+            }
+
+            response = client.GetAsync(url).Result;
+            IEnumerable<TransactionDto> expenseTransactions = response.Content.ReadAsAsync<IEnumerable<TransactionDto>>().Result;
+            ViewModel.TransactionList = expenseTransactions;
+            ViewModel.SelectedFilter = filter;
+            ViewModel.SelectedCategory = categoryName;
+
+            return View(ViewModel);
         }
 
         // GET: Transaction/NewExpense

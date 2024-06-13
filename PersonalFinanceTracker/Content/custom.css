@@ -133,8 +133,7 @@ h2.mb-4 {
     font-weight: bold;
 }
 
-.form-control,
-.form-select {
+.form-control {
     border-radius: 5px;
     width: 100%; /* Ensure the form controls take up 100% width */
 }
@@ -147,8 +146,20 @@ h2.mb-4 {
     font-weight: bold;
 }
 
-    .btn-success:hover {
-        background-color: #218838;
-        border-color: #1e7e34;
+.btn-success:hover {
+   background-color: #218838;
+   border-color: #1e7e34;
+   color: #fff;
+}
+
+.select-primary {
+    background-color: #007bff;
+    color: #fff;
+    border-color: #007bff;
+}
+
+    .select-primary:focus {
+        background-color: #0056b3;
         color: #fff;
+        border-color: #0056b3;
     }
