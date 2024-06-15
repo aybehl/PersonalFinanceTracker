@@ -158,8 +158,21 @@ h2.mb-4 {
     border-color: #007bff;
 }
 
-    .select-primary:focus {
-        background-color: #0056b3;
-        color: #fff;
-        border-color: #0056b3;
-    }
+.select-primary:focus {
+   background-color: #0056b3;
+   color: #fff;
+   border-color: #0056b3;
+ }
+
+.btn-primary.active,
+.btn-primary:active,
+.btn-primary:focus,
+.btn-primary:hover {
+    background-color: #003772; /* Darker shade of blue for active state */
+    border-color: #0056b3;
+}
+
+.no-link-style {
+    color: inherit;
+    text-decoration: none;
+}

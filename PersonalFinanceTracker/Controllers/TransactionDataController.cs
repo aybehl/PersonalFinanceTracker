@@ -9,6 +9,8 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
+using PersonalFinanceTracker.Models.ViewModels;
+using System.Collections;
 
 namespace PersonalFinanceTracker.Controllers
 {
@@ -26,20 +28,35 @@ namespace PersonalFinanceTracker.Controllers
         /// <returns>A list of all Transactions</returns>        
         [HttpGet]
         [Route("api/TransactionData/ListAllTransactions")]
-        public IEnumerable<TransactionDto> ListAllTransactions() {
-            List<Transaction> transactionList = db.Transactions.ToList();
+        public IEnumerable<TransactionDto> ListAllTransactions(bool currentMonth = false)
+        {
+            var transactions = db.Transactions
+                .Include(t => t.Category)
+                .Include(t => t.Category.TransactionType)
+                .AsQueryable();
+
+            if (currentMonth)
+            {
+                var startOfMonth = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+                var endOfMonth = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(1);
+                transactions = transactions.Where(t => t.TransactionDate >= startOfMonth && t.TransactionDate < endOfMonth);
+            }
+
+            var transactionList = transactions.ToList();
 
             List<TransactionDto> transactionDtos = new List<TransactionDto>();
 
-            foreach (Transaction transaction in transactionList) { 
-                TransactionDto transactionDto = new TransactionDto();
-
-                transactionDto.TransactionId = transaction.TransactionId;
-                transactionDto.Title = transaction.Title;
-                transactionDto.Amount = transaction.Amount;
-                transactionDto.CategoryName = transaction.Category.CategoryName;
-                transactionDto.TransactionDate = transaction.TransactionDate;
-                transactionDto.TransactionTypeName = transaction.Category.TransactionType.TransactionTypeName;
+            foreach (Transaction transaction in transactionList)
+            {
+                TransactionDto transactionDto = new TransactionDto
+                {
+                    TransactionId = transaction.TransactionId,
+                    Title = transaction.Title,
+                    Amount = transaction.Amount,
+                    CategoryName = transaction.Category.CategoryName,
+                    TransactionDate = transaction.TransactionDate,
+                    TransactionTypeName = transaction.Category.TransactionType.TransactionTypeName
+                };
 
                 transactionDtos.Add(transactionDto);
             }
@@ -276,6 +293,78 @@ namespace PersonalFinanceTracker.Controllers
 
         private bool TransactionExists(int id) {
             return db.Transactions.Count(t => t.TransactionId == id) > 0;
+        }
+
+        /// <summary>
+        /// Gets the total amount spent or gained per category.
+        /// </summary>
+        /// <example> 
+        /// GET api/TransactionData/CategoryTotals -> [{"CategoryName":"Groceries","CategoryId":1,"TransactionType":"Expense","TotalAmount":80.65},{"CategoryName":"Salary","CategoryId":2,"TransactionType":"Income","TotalAmount":5500.99},{"CategoryName":"Bonus","CategoryId":11,"TransactionType":"Income","TotalAmount":500.00}]
+        /// </example> 
+        /// <returns>A list of category totals grouped by transaction type and category name.</returns>
+        [HttpGet]
+        [Route("api/TransactionData/CategoryTotals")]
+        public IEnumerable<CategoryTotal> GetCategoryTotals(bool currentMonth = false)
+        {
+            var transactions = db.Transactions
+                .Include(t => t.Category)
+                .Include(t => t.Category.TransactionType)
+                .AsQueryable();
+
+            if (currentMonth)
+            {
+                var startOfMonth = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+                var endOfMonth = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(1);
+                transactions = transactions.Where(t => t.TransactionDate >= startOfMonth && t.TransactionDate < endOfMonth);
+            }
+            
+            var categoryTotals = transactions
+                .GroupBy(t => new { t.Category.CategoryName, t.Category.CategoryId, t.Category.TransactionType.TransactionTypeName })
+                .Select(g => new CategoryTotal
+                {
+                    TransactionType = g.Key.TransactionTypeName,
+                    CategoryName = g.Key.CategoryName,
+                    CategoryId = g.Key.CategoryId,
+                    TotalAmount = g.Sum(t => t.Amount)
+                })
+                .ToList();
+
+            return categoryTotals;
+        }
+
+        /// <summary>
+        /// Gets the total amount spent or gained per transaction type (Income or Expense).
+        /// </summary>
+        /// <example>
+        /// GET api/TransactionData/TransactionTypeTotals -> [{"TransactionTypeName":"Expense","TransactionTypeId":0,"TotalAmount":80.65},{"TransactionTypeName":"Income","TransactionTypeId":0,"TotalAmount":6000.99}]
+        /// </example>
+        /// <returns>A list of totals grouped by transaction type.</returns>
+        [HttpGet]
+        [Route("api/TransactionData/TransactionTypeTotals")]
+        public IEnumerable<TransactionTypeTotal> GetTransactionTypeTotals(bool currentMonth = false)
+        {
+            var transactions = db.Transactions
+                .Include(t => t.Category.TransactionType)
+                .AsQueryable();
+
+            if (currentMonth)
+            {
+                var startOfMonth = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+                var endOfMonth = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(1);
+                transactions = transactions.Where(t => t.TransactionDate >= startOfMonth && t.TransactionDate < endOfMonth);
+            }
+
+            var transactionTypeTotals = transactions
+                .GroupBy(t => new { t.Category.TransactionType.TransactionTypeName, t.Category.TransactionType.TransactionTypeId })
+                .Select(g => new TransactionTypeTotal
+                {
+                    TransactionTypeId = g.Key.TransactionTypeId,
+                    TransactionTypeName = g.Key.TransactionTypeName,
+                    TotalAmount = g.Sum(t => t.Amount)
+                })
+                .ToList();
+
+            return transactionTypeTotals;
         }
     }
 }

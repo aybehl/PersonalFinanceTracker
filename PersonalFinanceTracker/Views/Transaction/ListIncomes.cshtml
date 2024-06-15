@@ -1,0 +1,102 @@
+﻿@model PersonalFinanceTracker.Models.ViewModels.ListTransactions
+
+@{
+    ViewBag.Title = "List all Incomes";
+}
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4">My Incomes</h2>
+    <div class="filter-container" style="max-width: 700px; margin: 0 auto;">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="d-flex align-items-center">
+                <img src="~/Content/images/filter_icon.png" alt="A funnel shaped icon">
+                <span class="filter-by-text ms-2">Filter By</span>
+                <a href="@Url.Action("ListIncomes", "Transaction", new { filter = "currentMonth" })" class="btn btn-primary ms-2 @(Model.SelectedFilter == "currentMonth" ? "active" : "")" role="button">This Month</a>
+                <a href="@Url.Action("ListIncomes", "Transaction", new { filter = "lastMonth" })" class="btn btn-primary ms-2 @(Model.SelectedFilter == "lastMonth" ? "active" : "")" role="button">Last Month</a>
+
+                <select class="form-select ms-2 select-primary" style="width: auto;" id="categoryDropdown" onchange="location = this.value;">
+                    <option selected disabled>Category</option>
+                    @foreach (var category in Model.CategoryList)
+                    {
+                        <option value="@Url.Action("ListIncomes", "Transaction", new { categoryName = category.CategoryName })" @(Model.SelectedCategory == category.CategoryName ? "selected" : "")>@category.CategoryName</option>
+                    }
+                </select>
+            </div>
+            <a href="/Transaction/NewIncome" class="btn btn-danger" role="button">+ New Income</a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            @foreach (var transaction in Model.TransactionList)
+            {
+                <div class="card mt-3" style="max-width: 700px; margin: auto;">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center">
+                                <div>
+                                    <h5 class="card-title">@transaction.Title</h5>
+                                    <div class="d-flex">
+                                        <p class="card-text me-3">$@transaction.Amount</p>
+                                        <p class="card-text">@transaction.TransactionDate.ToString("dd MMM yyyy")</p>
+                                    </div>
+                                    <button class="btn btn-sm btn-category">@transaction.CategoryName</button>
+                                </div>
+                            </div>
+                            <div>
+                                <a href="/Transaction/EditIncome/@transaction.TransactionId" class="btn btn-outline-primary" role="button">
+                                    <img src="~/Content/images/edit_icon.png" alt="A pencil icon">
+                                </a>
+                                <a href="#" class="btn btn-outline-danger me-2" role="button" data-bs-toggle="modal" data-bs-target="#deleteModal" data-id="@transaction.TransactionId" data-title="@transaction.Title">
+                                    <img src="~/Content/images/trash_icon.png" alt="A dustbin icon">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-danger text-center" role="alert">
+                    <span class="modal-title-icon">&#9888;</span> <!-- Warning Icon -->
+                    <strong id="incomeTitle"></strong>
+                </div>
+                <p class="text-center">Are you sure you want to delete this income?</p>
+                <p class="text-center">This action cannot be undone. All values associated with this income will be lost.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form method="post" id="deleteForm">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var deleteModal = document.getElementById('deleteModal');
+        deleteModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget; // Button that triggered the modal
+            var transactionId = button.getAttribute('data-id'); // Extract info from data-* attributes
+            var transactionTitle = button.getAttribute('data-title'); // Extract the title
+            var deleteUrl = '/Transaction/DeleteIncome/' + transactionId;
+            var modalTitle = deleteModal.querySelector('#incomeTitle');
+            var deleteForm = deleteModal.querySelector('#deleteForm');
+            modalTitle.textContent = transactionTitle; // Update the modal title
+            deleteForm.setAttribute('action', deleteUrl); // Update the form action
+        });
+    });
+</script>

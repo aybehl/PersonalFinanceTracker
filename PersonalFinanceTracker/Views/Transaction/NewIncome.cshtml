@@ -1,0 +1,57 @@
+﻿@model IEnumerable<PersonalFinanceTracker.Models.CategoryDto>
+
+@{
+    ViewBag.Title = "Add an Income";
+}
+
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+    <div class="card p-4" style="width: 100%; max-width: 600px;">
+        <h3 class="text-center mb-4">Add an Income</h3>
+        <form action="@Url.Action("CreateIncome", "Transaction")" method="POST">
+            <div class="row mb-3">
+                <div class="col-12">
+                    <label for="incomeTitle" class="form-label">Income Title</label>
+                    <input type="text" class="form-control" id="incomeTitle" name="Title" placeholder="Enter the income title" required>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="amount" class="form-label">Amount</label>
+                    <div class="input-group">
+                        <span class="input-group-text">$</span>
+                        <input type="text" class="form-control" id="amount" name="Amount" placeholder="Enter amount" required>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label for="category" class="form-label">Category</label>
+                    <select id="category" name="CategoryId" class="form-select" required>
+                        <option value="" selected>Choose Category</option>
+                        @foreach (var category in Model)
+                        {
+                            <option value="@category.CategoryId">@category.CategoryName</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="date" class="form-label">Date</label>
+                    <input type="date" class="form-control" name="TransactionDate" id="date" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="repeats" class="form-label">Repeats</label>
+                    <select id="repeats" class="form-select">
+                        <option selected>Doesn't Repeat</option>
+                        <option>Daily</option>
+                        <option>Weekly</option>
+                        <option>Monthly</option>
+                        <option>Yearly</option>
+                    </select>
+                </div>
+            </div>
+            <div class="text-center mt-5">
+                <button type="submit" class="btn btn-success">Submit</button>
+            </div>
+        </form>
+    </div>
+</div>

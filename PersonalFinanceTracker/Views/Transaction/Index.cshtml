@@ -1,0 +1,95 @@
+﻿@model PersonalFinanceTracker.Models.ViewModels.TransactionOverview
+
+@{
+    ViewBag.Title = "Transaction Overview";
+
+    var totalIncome = Model.TransactionTypeTotalList?.FirstOrDefault(t => t.TransactionTypeName == "Income")?.TotalAmount ?? 0;
+    var totalExpense = Model.TransactionTypeTotalList?.FirstOrDefault(t => t.TransactionTypeName == "Expense")?.TotalAmount ?? 0;
+}
+
+<div class="container mt-5">
+    <div class="row mb-4 text-center justify-content-center">
+        <div class="col-md-4">
+            <a href="@Url.Action("ListIncomes", "Transaction", new { currentMonth = true })" class="text-decoration-none no-link-style">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">@Model.CurrentMonth Income</h5>
+                        <p class="card-text">$@totalIncome</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a href="@Url.Action("ListExpenses", "Transaction", new { currentMonth = true })" class="text-decoration-none no-link-style">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">@Model.CurrentMonth Expense</h5>
+                        <p class="card-text">$@totalExpense</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <h3 class="mb-3">Expense Overview for @Model.CurrentMonth</h3>
+            <div class="row">
+                @if (Model.CategoryTotalList != null)
+                {
+                    foreach (var category in Model.CategoryTotalList.Where(c => c.TransactionType == "Expense"))
+                    {
+                        <div class="col-md-4 mb-3">
+                            <a href="@Url.Action("ListExpenses", "Transaction", new { categoryName = category.CategoryName })" class="text-decoration-none no-link-style">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">@category.CategoryName</h5>
+                                        <p class="card-text">$@category.TotalAmount</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    }
+                }
+            </div>
+
+            <h3 class="mb-3 mt-4">Income Overview for @Model.CurrentMonth</h3>
+            <div class="row">
+                @if (Model.CategoryTotalList != null)
+                {
+                    foreach (var category in Model.CategoryTotalList.Where(c => c.TransactionType == "Income"))
+                    {
+                        <div class="col-md-4 mb-3">
+                            <a href="@Url.Action("ListIncomes", "Transaction", new { categoryName = category.CategoryName })" class="text-decoration-none no-link-style">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">@category.CategoryName</h5>
+                                        <p class="card-text">$@category.TotalAmount</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <h3 class="mb-3">Transaction Summary for @Model.CurrentMonth</h3>
+            <div class="list-group">
+                @if (Model.TransactionList != null)
+                {
+                    foreach (var transaction in Model.TransactionList)
+                    {
+                        <div class="list-group-item">
+                            <h5 class="mb-1">@transaction.Title</h5>
+                            <p class="mb-1">$@transaction.Amount</p>
+                            <small>@transaction.TransactionDate.ToString("d MMM yyyy")</small>
+                            <button class="btn btn-sm btn-category">@transaction.CategoryName</button>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>
