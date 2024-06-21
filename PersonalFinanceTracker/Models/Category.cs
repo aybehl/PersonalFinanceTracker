@@ -23,5 +23,6 @@ namespace PersonalFinanceTracker.Models
         public string CategoryName { get; set; }
 
         public string TransactionTypeName { get; set; }
+        public int TransactionTypeId { get; set; }
     }
 }

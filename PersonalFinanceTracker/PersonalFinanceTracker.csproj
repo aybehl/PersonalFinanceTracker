@@ -182,6 +182,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\CategoryController.cs" />
     <Compile Include="Controllers\CategoryDataController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -221,6 +222,7 @@
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Transaction.cs" />
     <Compile Include="Models\TransactionType.cs" />
+    <Compile Include="Models\ViewModels\ListCategories.cs" />
     <Compile Include="Models\ViewModels\TransactionTypeTotal.cs" />
     <Compile Include="Models\ViewModels\CategoryTotal.cs" />
     <Compile Include="Models\ViewModels\ListTransactions.cs" />
@@ -261,6 +263,7 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="JsonData\Transaction.json" />
+    <Content Include="JsonData\Category.json" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.0.js" />
     <Content Include="Scripts\jquery-3.7.0.min.js" />
@@ -314,6 +317,7 @@
     <Content Include="Views\Transaction\ListIncomes.cshtml" />
     <Content Include="Views\Transaction\NewIncome.cshtml" />
     <Content Include="Views\Transaction\Index.cshtml" />
+    <Content Include="Views\Category\ListCategories.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

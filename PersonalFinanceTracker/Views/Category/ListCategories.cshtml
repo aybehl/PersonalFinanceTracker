@@ -1,0 +1,146 @@
+﻿@model PersonalFinanceTracker.Models.ViewModels.ListCategories
+
+@{
+    ViewBag.Title = "List Categories";
+}
+
+<div class="container mt-5">
+    <!-- Income Categories Section -->
+    <div class="mb-5">
+        <h3>Income Categories</h3>
+        <div class="d-flex flex-wrap justify-content-start">
+            @foreach (var category in Model.IncomeCategoryList)
+            {
+                <div class="card mb-3 me-3" style="width: auto;">
+                    <div class="card-body">
+                        <h5 class="card-title">@category.CategoryName</h5>
+                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#updateCategoryModal" data-id="@category.CategoryId" data-name="@category.CategoryName" data-transactiontype="@category.TransactionTypeId">Update</button>
+                        <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteCategoryModal" data-id="@category.CategoryId" data-name="@category.CategoryName">Delete</button>
+                    </div>
+                </div>
+            }
+        </div>
+        <button class="btn btn-success mt-3" data-bs-toggle="modal" data-bs-target="#addCategoryModal" data-transactiontype="Income">Add Category</button>
+    </div>
+
+    <!-- Expense Categories Section -->
+    <div>
+        <h3>Expense Categories</h3>
+        <div class="d-flex flex-wrap">
+            @foreach (var category in Model.ExpenseCategoryList)
+            {
+                <div class="card mb-3 me-3" style="width: auto;">
+                    <div class="card-body">
+                        <h5 class="card-title">@category.CategoryName</h5>
+                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#updateCategoryModal" data-id="@category.CategoryId" data-name="@category.CategoryName" data-transactiontype="@category.TransactionTypeId">Update</button>
+                        <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteCategoryModal" data-id="@category.CategoryId" data-name="@category.CategoryName">Delete</button>
+                    </div>
+                </div>
+            }
+        </div>
+        <button class="btn btn-success mt-3" data-bs-toggle="modal" data-bs-target="#addCategoryModal" data-transactiontype="Expense">Add Category</button>
+    </div>
+</div>
+
+<!-- Add Category Modal -->
+<div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addCategoryModalLabel">Add Category</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addCategoryForm" method="post" action="@Url.Action("AddCategory", "Category")">
+                    <div class="mb-3">
+                        <label for="addCategoryName" class="form-label">Category Name</label>
+                        <input type="text" class="form-control" id="addCategoryName" name="CategoryName" required>
+                    </div>
+                    <input type="hidden" id="addTransactionTypeId" name="TransactionTypeId">
+                    <button type="submit" class="btn btn-success">Add</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Update Category Modal -->
+<div class="modal fade" id="updateCategoryModal" tabindex="-1" aria-labelledby="updateCategoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="updateCategoryModalLabel">Update Category</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="updateCategoryForm" method="post" action="@Url.Action("UpdateCategory", "Category")">
+                    <div class="mb-3">
+                        <label for="updateCategoryName" class="form-label">Category Name</label>
+                        <input type="text" class="form-control" id="updateCategoryName" name="CategoryName" required>
+                    </div>
+                    <input type="hidden" id="updateCategoryId" name="CategoryId">
+                    <input type="hidden" id="updateTransactionTypeId" name="TransactionTypeId">
+                    <button type="submit" class="btn btn-primary">Update</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Category Modal -->
+<div class="modal fade" id="deleteCategoryModal" tabindex="-1" aria-labelledby="deleteCategoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteCategoryModalLabel">Delete Category</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete the category <strong id="deleteCategoryName"></strong>?</p>
+                <form id="deleteCategoryForm" method="post" action="@Url.Action("DeleteCategory", "Category")">
+                    <input type="hidden" id="deleteCategoryId" name="CategoryId">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var addCategoryModal = document.getElementById('addCategoryModal');
+    addCategoryModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget;
+        var transactionTypeId = button.getAttribute('data-transactiontype') === "Income" ? 1 : 2;
+        var addTransactionTypeId = addCategoryModal.querySelector('#addTransactionTypeId');
+        addTransactionTypeId.value = transactionTypeId;
+    });
+
+    var updateCategoryModal = document.getElementById('updateCategoryModal');
+    updateCategoryModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget;
+        var categoryId = button.getAttribute('data-id');
+        var categoryName = button.getAttribute('data-name');
+        var transactionTypeId = button.getAttribute('data-transactiontype');
+
+        var updateCategoryId = updateCategoryModal.querySelector('#updateCategoryId');
+        var updateCategoryName = updateCategoryModal.querySelector('#updateCategoryName');
+        var updateTransactionTypeId = updateCategoryModal.querySelector('#updateTransactionTypeId');
+
+        updateCategoryId.value = categoryId;
+        updateCategoryName.value = categoryName;
+        updateTransactionTypeId.value = transactionTypeId;
+    });
+
+    var deleteCategoryModal = document.getElementById('deleteCategoryModal');
+    deleteCategoryModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget;
+        var categoryId = button.getAttribute('data-id');
+        var categoryName = button.getAttribute('data-name');
+
+        var deleteCategoryId = deleteCategoryModal.querySelector('#deleteCategoryId');
+        var deleteCategoryName = deleteCategoryModal.querySelector('#deleteCategoryName');
+
+        deleteCategoryId.value = categoryId;
+        deleteCategoryName.textContent = categoryName;
+    });
+</script>
