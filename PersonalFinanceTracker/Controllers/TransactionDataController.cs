@@ -42,7 +42,7 @@ namespace PersonalFinanceTracker.Controllers
                 transactions = transactions.Where(t => t.TransactionDate >= startOfMonth && t.TransactionDate < endOfMonth);
             }
 
-            var transactionList = transactions.ToList();
+            var transactionList = transactions.OrderByDescending(t => t.TransactionDate).ToList();
 
             List<TransactionDto> transactionDtos = new List<TransactionDto>();
 
@@ -148,7 +148,7 @@ namespace PersonalFinanceTracker.Controllers
                 query = query.Where(t => t.TransactionDate >= startOfLastMonth && t.TransactionDate < endOfLastMonth);
             }
 
-            var transactionList = query.ToList();
+            var transactionList = query.OrderByDescending(t => t.TransactionDate).ToList();
 
             List<TransactionDto> transactionDtos = new List<TransactionDto>();
 
@@ -319,6 +319,7 @@ namespace PersonalFinanceTracker.Controllers
             }
             
             var categoryTotals = transactions
+                .OrderByDescending(t => t.TransactionDate)
                 .GroupBy(t => new { t.Category.CategoryName, t.Category.CategoryId, t.Category.TransactionType.TransactionTypeName })
                 .Select(g => new CategoryTotal
                 {
@@ -355,6 +356,7 @@ namespace PersonalFinanceTracker.Controllers
             }
 
             var transactionTypeTotals = transactions
+                .OrderByDescending(t => t.TransactionDate)
                 .GroupBy(t => new { t.Category.TransactionType.TransactionTypeName, t.Category.TransactionType.TransactionTypeId })
                 .Select(g => new TransactionTypeTotal
                 {

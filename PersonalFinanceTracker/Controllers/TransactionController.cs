@@ -188,6 +188,7 @@ namespace PersonalFinanceTracker.Controllers
         [HttpPost]
         public ActionResult CreateExpense(Transaction transaction)
         {
+            transaction.TransactionDate = DateTime.SpecifyKind(transaction.TransactionDate, DateTimeKind.Utc);
             string url = "TransactionData/AddTransaction";
 
             string jsonpayload = jss.Serialize(transaction);
@@ -214,6 +215,8 @@ namespace PersonalFinanceTracker.Controllers
         [HttpPost]
         public ActionResult CreateIncome(Transaction transaction)
         {
+            transaction.TransactionDate = DateTime.SpecifyKind(transaction.TransactionDate, DateTimeKind.Utc);
+
             string url = "TransactionData/AddTransaction";
 
             string jsonpayload = jss.Serialize(transaction);
@@ -308,6 +311,7 @@ namespace PersonalFinanceTracker.Controllers
         [HttpPost]
         public ActionResult UpdateExpense(int id, Transaction transaction)
         {
+            transaction.TransactionDate = DateTime.SpecifyKind(transaction.TransactionDate, DateTimeKind.Utc);
 
             string url = "TransactionData/UpdateTransaction/" + id;
             transaction.TransactionId = id;
@@ -333,6 +337,7 @@ namespace PersonalFinanceTracker.Controllers
         [HttpPost]
         public ActionResult UpdateIncome(int id, Transaction transaction)
         {
+            transaction.TransactionDate = DateTime.SpecifyKind(transaction.TransactionDate, DateTimeKind.Utc);
 
             string url = "TransactionData/UpdateTransaction/" + id;
             transaction.TransactionId = id;
