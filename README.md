@@ -27,8 +27,10 @@ This repository contains the code for a Personal Finance Tracker called SpendSma
 #### ListAllTransactions
 - **URL**: `api/TransactionData/ListAllTransactions`
 - **Method**: GET
-- **Description**: Retrieves a list of all transactions.
-- **Example**: `GET api/TransactionData/ListAllTransactions`
+- **Description**: Retrieves a list of all transactions. Optionally filters transactions for the current month.
+- **Parameters**:
+  - `currentMonth` (optional, bool)
+- **Example**: `GET api/TransactionData/ListAllTransactions?currentMonth=true`
 
 #### findTransactionById
 - **URL**: `api/TransactionData/findTransactionById/{transactionId}`
@@ -84,6 +86,27 @@ This repository contains the code for a Personal Finance Tracker called SpendSma
 - **Description**: Retrieves a list of categories based on the transaction type name.
 - **Parameters**: `transactionTypeName` (string)
 - **Example**: `GET api/CategoryData/listCategoryByTransactionType?transactionTypeName=Income`
+
+#### AddCategory
+- **URL**: `api/CategoryData/AddCategory`
+- **Method**: POST
+- **Description**: Adds a new category.
+- **Parameters**: `category` (Category JSON object)
+
+#### UpdateCategory
+- **URL**: `api/CategoryData/UpdateCategory/{id}`
+- **Method**: PUT
+- **Description**: Updates a particular category in the system with PUT data input.
+- **Parameters**:
+  - `id` (int)
+  - `category` (Category JSON object)
+
+#### DeleteCategory
+- **URL**: `api/CategoryData/DeleteCategory/{id}`
+- **Method**: DELETE
+- **Description**: Deletes a category from the system by its ID.
+- **Parameters**: `id` (int)
+- **Returns**: If the category has associated transactions, returns a `409 Conflict` status with a message indicating the category cannot be deleted.
 
 ## How to Use
 

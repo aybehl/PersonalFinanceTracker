@@ -363,7 +363,7 @@ namespace PersonalFinanceTracker.Controllers
         [HttpPost]
         public ActionResult DeleteExpense(int id)
         {
-            string url = "TransactionData/DeleteTransaction" + id;
+            string url = "TransactionData/DeleteTransaction/" + id;
             
             HttpResponseMessage response = client.DeleteAsync(url).Result;
 

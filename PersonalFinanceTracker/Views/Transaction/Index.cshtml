@@ -10,7 +10,7 @@
 <div class="container mt-5">
     <div class="row mb-4 text-center justify-content-center">
         <div class="col-md-4">
-            <a href="@Url.Action("ListIncomes", "Transaction", new { currentMonth = true })" class="text-decoration-none no-link-style">
+            <a href="@Url.Action("ListIncomes", "Transaction", new { filter = "currentMonth" })" class="text-decoration-none no-link-style">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">@Model.CurrentMonth Income</h5>
@@ -20,7 +20,7 @@
             </a>
         </div>
         <div class="col-md-4">
-            <a href="@Url.Action("ListExpenses", "Transaction", new { currentMonth = true })" class="text-decoration-none no-link-style">
+            <a href="@Url.Action("ListExpenses", "Transaction", new { filter = "currentMonth" })" class="text-decoration-none no-link-style">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">@Model.CurrentMonth Expense</h5>
@@ -40,7 +40,7 @@
                     foreach (var category in Model.CategoryTotalList.Where(c => c.TransactionType == "Expense"))
                     {
                         <div class="col-md-4 mb-3">
-                            <a href="@Url.Action("ListExpenses", "Transaction", new { categoryName = category.CategoryName })" class="text-decoration-none no-link-style">
+                            <a href="@Url.Action("ListExpenses", "Transaction", new { categoryName = category.CategoryName, filter = "currentMonth" })" class="text-decoration-none no-link-style">
                                 <div class="card">
                                     <div class="card-body">
                                         <h5 class="card-title">@category.CategoryName</h5>
@@ -60,7 +60,7 @@
                     foreach (var category in Model.CategoryTotalList.Where(c => c.TransactionType == "Income"))
                     {
                         <div class="col-md-4 mb-3">
-                            <a href="@Url.Action("ListIncomes", "Transaction", new { categoryName = category.CategoryName })" class="text-decoration-none no-link-style">
+                            <a href="@Url.Action("ListIncomes", "Transaction", new { categoryName = category.CategoryName, filter = "currentMonth" })" class="text-decoration-none no-link-style">
                                 <div class="card">
                                     <div class="card-body">
                                         <h5 class="card-title">@category.CategoryName</h5>

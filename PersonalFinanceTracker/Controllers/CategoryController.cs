@@ -111,9 +111,16 @@ namespace PersonalFinanceTracker.Controllers
             }
             else
             {
-                TempData["ErrorMessage"] = "An error occurred while deleting the category. Please try again.";
-                return RedirectToAction("ListCategories");
+                TempData["ErrorMessage"] = "This Category cannot be deleted as it has associated Transactions";
+                TempData["BackUrl"] = Url.Action("ListCategories", "Category");
+                return RedirectToAction("Error");
             }
+        }
+
+        //GET: Transaction/Error
+        public ActionResult Error()
+        {
+            return View();
         }
 
     }

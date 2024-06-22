@@ -318,6 +318,7 @@
     <Content Include="Views\Transaction\NewIncome.cshtml" />
     <Content Include="Views\Transaction\Index.cshtml" />
     <Content Include="Views\Category\ListCategories.cshtml" />
+    <Content Include="Views\Category\Error.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
